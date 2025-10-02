@@ -1,16 +1,19 @@
-from dotenv import load_dotenv
 import os
-import time
 import sys
+import time
+
 from PIL import Image, ImageDraw
+from dotenv import load_dotenv
+from traceback import format_exc
 from matplotlib import pyplot as plt
 
 # import namespaces
-
+from azure.ai.vision.imageanalysis import ImageAnalysisClient
+from azure.ai.vision.imageanalysis.model import VisualFeatures
+from azure.core.credentials import AzureKeyCredential
 
 
 def main():
-
     # Clear the console
     os.system('cls' if os.name=='nt' else 'clear')
 
@@ -25,19 +28,32 @@ def main():
         if len(sys.argv) > 1:
             image_file = sys.argv[1]
 
-
         # Authenticate Azure AI Vision client
-
+        cv_client = ImageAnalysisClient(
+            endpoint=ai_endpoint,
+            credential=AzureKeyCredential(ai_key)
+        )
         
         # Read text in image
-        
+        print(f"\nReading text in {image_file}")
+        with open(image_file, "rb") as f:
+            image_data = f.read()
+        result = cv_client.analyze(
+            image_data=image_data,
+            visual_features=[VisualFeautres.READ]
+        )
 
         # Print the text
-        
+        if result.read is not None:
+            print("\nText:")
+            for line in result.read.blocks[0].lines:
+                print(f" {line.text}")
+            # Annotate the text in the image
+            annotate_lines(image_file, result.read)
+            # Find individual words in each line
 
-
-    except Exception as ex:
-        print(ex)
+    except Exception:
+        print(format_exc())
 
 def annotate_lines(image_file, detected_text):
     print(f'\nAnnotating lines of text in image...')
