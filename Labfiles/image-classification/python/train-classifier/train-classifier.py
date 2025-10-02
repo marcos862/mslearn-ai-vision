@@ -1,8 +1,10 @@
+import os
+import time
+
 from azure.cognitiveservices.vision.customvision.training import CustomVisionTrainingClient
 from azure.cognitiveservices.vision.customvision.training.models import ImageFileCreateBatch, ImageFileCreateEntry, Region
 from msrest.authentication import ApiKeyCredentials
-import time
-import os
+
 
 def main():
     from dotenv import load_dotenv
