@@ -85,7 +85,7 @@ def main():
             for detected_person in result.people.list:
                 if detected_person.confidence > 0.2:
                     # Print location and confidence of each person detected
-                    pritn(" {} (confidence: {:.2f}%)".format(
+                    print(" {} (confidence: {:.2f}%)".format(
                         detected_person.bounding_box, detected_person.confidence * 100))
             show_people(image_file, result.people.list)
 
