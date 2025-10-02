@@ -4,6 +4,7 @@ import requests
 
 from PIL import Image, ImageDraw
 from dotenv import load_dotenv
+from traceback import format_exc
 from matplotlib import pyplot as plt
 from azure.core.exceptions import HttpResponseError
 
@@ -79,11 +80,17 @@ def main():
             show_objects(image_file, result.objects.list)
 
         # Get people in the image
-  
-            
-        
-    except Exception as ex:
-        print(ex)
+        if result.people is not None:
+            print("\nPeople in image:")
+            for detected_person in result.people.list:
+                if detected_person.confidence > 0.2:
+                    # Print location and confidence of each person detected
+                    pritn(" {} (confidence: {:.2f}%)".format(
+                        detected_person.bounding_box, detected_person.confidence * 100))
+            show_people(image_file, result.people.list)
+
+    except Exception:
+        print(format_exc())
 
 
 def show_objects(image_filename, detected_objects):
