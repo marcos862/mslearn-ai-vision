@@ -40,7 +40,7 @@ def main():
             image_data = f.read()
         result = cv_client.analyze(
             image_data=image_data,
-            visual_features=[VisualFeautres.READ]
+            visual_features=[VisualFeatures.READ]
         )
 
         # Print the text
