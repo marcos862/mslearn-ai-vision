@@ -55,7 +55,7 @@ def main():
             )
 
         face_count = 0
-        if len(deteted_faces) > 0:
+        if len(detected_faces) > 0:
             print(len(detected_faces), ' faces detected.')
 
             for face in detected_faces:
