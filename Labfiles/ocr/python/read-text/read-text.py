@@ -54,7 +54,7 @@ def main():
             print("\nIndividual words:")
             for line in result.read.blocks[0].lines:
                 for word in line.words:
-                    print(f"  {word.text} (Confidence: {(word.confidence * 100):.2f}%")
+                    print(f"  {word.text} (Confidence: {(word.confidence * 100):.2f}%)")
             # Annotate the words in the image
             annotate_words(image_file, result.read)
 
