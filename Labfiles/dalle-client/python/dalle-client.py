@@ -4,7 +4,7 @@ import requests
 # Add references
 from json import loads as json_loads
 from dotenv import load_dotenv
-from openai import AzureOpenAi
+from openai import AzureOpenAI
 from traceback import format_exc
 from azure.identity import DefaultAzureCredntial, get_bearer_token_provider
 
