@@ -12,6 +12,27 @@ from azure.identity import DefaultAzureCredential
 from azure.ai.projects import AIProjectClient
 
 
+def get_local_image():
+    script_dir = Path(__file__).parent
+    image_path = script_dir / 'mystery-fruit.jpeg'
+    mime_type = "image/jpeg"
+
+    # Readn an encode the imag efile
+    with open(image_path, "rb") as image_file:
+        base64_encoded_data = base64.b64encode(image_file.read()).decode('utf-8')
+    data_url = f"data:{mime_type};base64,{base64_encoded_data}"
+    return data_url
+
+
+def get_url_image():
+    image_url = "https://github.com/MicrosoftLearning/mslearn-ai-vision/raw/refs/heads/main/Labfiles/gen-ai-vision/orange.jpeg"
+    image_format = "jpeg"
+    request = Request(image_url, headers={"User-Agent": "Mozilla/5.0"})
+    image_data = base64.b64encode(urlopen(request).read()).decode("utf-8")
+    data_url = f"data:image/{image_format};base64,{image_data}"
+    return data_url
+
+
 def main(): 
     # Clear the console
     os.system('cls' if os.name=='nt' else 'clear')
@@ -50,11 +71,7 @@ def main():
                 print("Getting a response ...\n")
 
                 # Get a response to image input
-                image_url = "https://github.com/MicrosoftLearning/mslearn-ai-vision/raw/refs/heads/main/Labfiles/gen-ai-vision/orange.jpeg"
-                image_format = "jpeg"
-                request = Request(image_url, headers={"User-Agent": "Mozilla/5.0"})
-                image_data = base64.b64encode(urlopen(request).read()).decode("utf-8")
-                data_url = f"data:image/{image_format};base64,{image_data}"
+                data_url = get_local_image()
                 response = openai_client.chat.completions.create(
                     model=model_deployment,
                     messages=[
