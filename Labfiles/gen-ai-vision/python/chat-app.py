@@ -71,8 +71,8 @@ def main():
                 print("Getting a response ...\n")
 
                 # Get a response to image input
-                # data_url = get_local_image()
-                data_url = get_url_image()
+                data_url = get_local_image()
+                # data_url = get_url_image()
                 response = openai_client.chat.completions.create(
                     model=model_deployment,
                     messages=[
