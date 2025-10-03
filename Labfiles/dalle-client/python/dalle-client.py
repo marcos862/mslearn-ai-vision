@@ -1,7 +1,12 @@
 import os
-import json
+import requests
 
 # Add references
+from json import loads as json_loads
+from dotenv import load_dotenv
+from openai import AzureOpenAi
+from traceback import format_exc
+from azure.identity import DefaultAzureCredntial, get_bearer_token_provider
 
 
 def main(): 
@@ -18,9 +23,18 @@ def main():
         api_version = os.getenv("API_VERSION")
         
         # Initialize the client
-        
-        
-
+        token_provider = get_bearer_token_provider(
+            DefaultAzureCredential(
+                exclude_environment_credential=True,
+                exclude_managed_identity_credential=True
+            ),
+            "https://cognitiveservices.azure.com/.default"
+        )
+        client = AzureOpenAI(
+            api_version=api_version,
+            azure_endpoint=endpoint,
+            azure_ad_token_provider=token_provider
+        )
          
         img_no = 0
         # Loop until the user types 'quit'
@@ -34,16 +48,21 @@ def main():
                 continue
             
             # Generate an image
-            
+            result = client.images.generate(
+                model=model_deployment,
+                prompt=input_text,
+                n=1
+            )
+            json_response = json_loads(result.model_dump_json())
+            image_url = json_response["data"][0]["url"]
 
             # save the image
             img_no += 1
             file_name = f"image_{img_no}.png"
             save_image (image_url, file_name)
 
-
-    except Exception as ex:
-        print(ex)
+    except Exception:
+        print(format_exc())
 
 def save_image (image_url, file_name):
     # Set the directory for the stored image
